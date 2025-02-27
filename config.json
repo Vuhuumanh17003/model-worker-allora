@@ -4,7 +4,7 @@
     "keyringBackend": "test",
     "keyringPassphrase": "",
     "addressKeyName": "testkey",
-    "addressRestoreMnemonic": "issue deputy recall suggest witness office physical shield gain put canyon stock",
+    "addressRestoreMnemonic": "",
     "alloraHomeDir": "",
     "gasPrices": "auto",
     "gasPriceUpdateInterval": 5,
