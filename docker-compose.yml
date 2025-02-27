@@ -1,0 +1,52 @@
+services:
+  inference:
+    container_name: allora-inference-13
+    build:
+      context: .
+    command: python -u /app/app.py
+    environment:
+      - API_PORT=8021
+    ports:
+      - "8021:8021"
+    healthcheck:
+      # test: ["CMD", "curl", "-f", "http://localhost:8021/inference/ETH"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8021/inference/ETH || exit 1 && curl -f http://localhost:8021/inference/BNB || exit 1 && curl -f http://localhost:8021/inference/ARB || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 300s
+    volumes:
+      - ./inference-data:/app/data
+  
+  updater:
+    container_name: allora-updater-13
+    build: .
+    environment:
+      - INFERENCE_API_ADDRESS=http://inference:8021
+    command: >
+      sh -c "
+      while true; do
+        python -u /app/update_app.py;
+        sleep 300;  # 300 seconds (5 minutes)
+      done
+      "
+    depends_on:
+      inference:
+        condition: service_healthy
+    
+  worker:
+    container_name: allora-worker-13
+    image: alloranetwork/allora-offchain-node:v0.9.1
+    volumes:
+      - ./worker-data:/data
+    working_dir: /data
+    depends_on:
+      inference:
+        condition: service_healthy
+    env_file:
+      - ./worker-data/env_file
+    entrypoint: ["/node/allora_offchain_node"]
+
+volumes:
+  inference-data:
+  worker-data:
