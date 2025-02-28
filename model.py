@@ -8,21 +8,7 @@ import retrying
 from config import data_base_path
 from sklearn.linear_model import LinearRegression
 
-# Cấu hình model: chọn model_type có thể là "LinearRegression", "LSTM", hoặc "XGBoost"
-model_config = {
-    "model_type": "XGBoost",   # Đổi giá trị thành "LinearRegression" hoặc "LSTM" nếu muốn sử dụng mô hình khác
-    "window_size": 10,         # Chỉ dùng cho LSTM
-    "epochs": 10,              # Chỉ dùng cho LSTM
-    "batch_size": 16,          # Chỉ dùng cho LSTM
-    "lstm_units": 32,          # Chỉ dùng cho LSTM
-    "learning_rate": 0.001,    # Chỉ dùng cho LSTM
-    "xgb_params": {            # Cấu hình cho XGBoost
-         "max_depth": 3,
-         "n_estimators": 100,
-         "learning_rate": 0.1,
-         "objective": "reg:squarederror"
-    }
-}
+
 
 forecast_price = {}
 
